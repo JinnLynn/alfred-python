@@ -3,7 +3,7 @@ import os, plistlib, time
 
 BundleID = None
 
-def bundle():
+def bundleID():
     global BundleID
     if BundleID:
         return BundleID
@@ -16,7 +16,7 @@ def bundle():
     return BundleID
 
 def log(s):
-    log_text = '[{} {}]: {}\n'.format(bundle(), time.strftime('%Y-%m-%d %H:%M:%S'), s)
+    log_text = '[{} {}]: {}\n'.format(bundleID(), time.strftime('%Y-%m-%d %H:%M:%S'), s)
     log_file = os.path.abspath('./log.txt')
     if not os.path.exists(log_file):
         with open(log_file, 'w') as f:

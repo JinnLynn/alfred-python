@@ -9,7 +9,7 @@ class Config(object):
     def __init__(self, config_file = 'config.json'):
         self.configs = {}
         self.configFile = ''
-        path = os.path.join(CONFIG_FOLDER, core.bundle())
+        path = os.path.join(CONFIG_FOLDER, core.bundleID())
         if not os.path.exists(path):
             os.makedirs(path)
         self.configFile = os.path.join(path, config_file)

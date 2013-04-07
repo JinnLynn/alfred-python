@@ -14,7 +14,7 @@ CACHE_DEFAULT_EXPIRE = 60 * 60 * 24
 
 class Cache(object):
     def __init__(self):
-        self.cache_dir = os.path.join(CACHE_FOLDER, core.bundle())
+        self.cache_dir = os.path.join(CACHE_FOLDER, core.bundleID())
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
 
