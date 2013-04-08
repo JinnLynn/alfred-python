@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import os, plistlib, time
+import os, sys, plistlib, time
+
+from feedback import Feedback
 
 BundleID = None
 
@@ -24,3 +26,38 @@ def log(s):
     else:
         with open(log_file, 'a') as f:
             f.write(log_text)
+
+def argv(pos, default=None):
+    try:
+        arg = sys.argv[pos]
+    except:
+        return default
+    return arg
+
+def exitWithFeedback(**kwargs):
+    fb = Feedback()
+    fb.addItem(**kwargs)
+    fb.output()
+    sys.exit(0)
+
+def exit(msg = ''):
+    if msg:
+        print(msg)
+    sys.exit(0)
+
+def notify(title, subtitle, text='', sound=True):
+    try:
+        import objc, AppKit
+        app = AppKit.NSApplication.sharedApplication()
+        NSUserNotification = objc.lookUpClass("NSUserNotification")
+        NSUserNotificationCenter = objc.lookUpClass("NSUserNotificationCenter")
+        notification = NSUserNotification.alloc().init()
+        notification.setTitle_(title)
+        notification.setSubtitle_(subtitle)
+        notification.setInformativeText_(text)
+        if sound:
+            notification.setSoundName_("NSUserNotificationDefaultSoundName")
+        NSUserNotificationCenter.defaultUserNotificationCenter().scheduleNotification_(notification)
+    except Exception, e:
+        log('Notification failed. {}'.format(e))
+    
