@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, json, time, shutil
+import os, json, time, shutil, codecs
 
 import core
 ##
@@ -26,7 +26,7 @@ class Cache(object):
         if not os.path.exists(path):
             return
         try:
-            with open(path, 'r') as f:
+            with codecs.open(path, 'r', 'utf-8') as f:
                 cache = json.load(f)
         except Exception, e:
             os.remove(path)
@@ -40,7 +40,7 @@ class Cache(object):
     def set(self, name, data, expire = CACHE_DEFAULT_EXPIRE):
         path = self.getCacheFile(name)
         try:
-            with open(path, 'w') as f:
+            with codecs.open(path, 'w', 'utf-8') as f:
                 cache = {
                     'expire_time'   : time.time() + expire,
                     'data'          : data

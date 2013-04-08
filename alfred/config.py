@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, json
+import os, json, codecs
 
 import core
 
@@ -15,7 +15,7 @@ class Config(object):
         self.configFile = os.path.join(path, config_file)
         if os.path.exists(path):
             try:
-                with open(self.configFile, 'r') as f:
+                with codecs.open(self.configFile, 'r', 'utf-8') as f:
                     self.configs = json.load(f)
             except Exception, e:
                 pass
@@ -23,7 +23,7 @@ class Config(object):
             self.configs = {}
 
     def save(self):
-        with open(self.configFile, 'w') as f:
+        with codecs.open(self.configFile, 'w', 'utf-8') as f:
             json.dump(self.configs, f)
         
     def get(self, key, default = None):
