@@ -18,41 +18,51 @@ class Cache(object):
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
 
-    def getCacheFile(self, name):
+    def getFilepath(self, name):
         return os.path.join(self.cache_dir, '{}.json'.format(name))
+
+    def getContent(self, name):
+        try:
+            path = self.getFilepath(name)
+            with codecs.open(path, 'r', 'utf-8') as f:
+                return json.load(f)
+        except:
+            pass
     
     def get(self, name):
-        path = self.getCacheFile(name)
-        if not os.path.exists(path):
-            return
         try:
-            with codecs.open(path, 'r', 'utf-8') as f:
-                cache = json.load(f)
-        except Exception, e:
-            os.remove(path)
-            return
-        # 过期
-        if time.time() > cache['expire_time']:
-            os.remove(path)
-            return
-        return cache['data']
+            cache = self.getContent(name)
+            if cache['expire_time'] >= time.time():
+                return cache['data']
+        except:
+            pass
+        self.delete(name)
         
-    def set(self, name, data, expire = CACHE_DEFAULT_EXPIRE):
-        path = self.getCacheFile(name)
+    def set(self, name, data, expire=CACHE_DEFAULT_EXPIRE):
+        path = self.getFilepath(name)
         try:
-            with codecs.open(path, 'w', 'utf-8') as f:
-                cache = {
+            cache = {
                     'expire_time'   : time.time() + expire,
                     'data'          : data
                 }
+            with codecs.open(path, 'w', 'utf-8') as f:
                 json.dump(cache, f)
-        except Exception, e:
+        except:
             pass
 
     def delete(self, name):
-        path = self.getCacheFile(name)
+        path = self.getFilepath(name)
         if os.path.exists(path):
             os.remove(path)
 
     def clean(self):
         shutil.rmtree(self.cache_dir)
+
+    def expireTimeout(self, name):
+        try:
+            cache = self.getContent(name)
+            if cache['expire_time'] >= time.time():
+                return cache['expire_time'] - time.time()
+        except:
+            pass
+        return -1
