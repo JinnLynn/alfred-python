@@ -10,7 +10,7 @@ class Item(object):
         self.content = {
             'title'     : kwargs.get('title', ''),
             'subtitle'  : kwargs.get('subtitle', ''),
-            'icon'      : kwargs.get('icon', 'icon.png')
+            'icon'      : kwargs.get('icon') if kwargs.get('icon') else 'icon.png'
         }
 
         it = kwargs.get('icontype', '').lower()
