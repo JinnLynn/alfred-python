@@ -35,15 +35,16 @@ def argv(pos, default=None):
     return arg
 
 def exitWithFeedback(**kwargs):
+    retcode = kwargs.pop('retcode', 0)
     fb = Feedback()
     fb.addItem(**kwargs)
     fb.output()
-    sys.exit(0)
+    sys.exit(retcode)
 
-def exit(msg = ''):
+def exit(msg='', retcode=0):
     if msg:
         print(msg)
-    sys.exit(0)
+    sys.exit(retcode)
 
 def notify(title, subtitle, text='', sound=True):
     try:
