@@ -73,7 +73,7 @@ class Feedback(object):
         ele_tree = ElementTree.Element('items')
         for item in self.items:
             ele_tree.append(item.getXMLElement())
-        res = ElementTree.tostring(ele_tree, encoding='utf-8')
+        res = ElementTree.tostring(ele_tree) #! 不要使用encoding='utf-8'等其它编码，防止某些特殊字符使得alfred解析错误
         if unescape:
             return saxutils.unescape(res)
         return res
