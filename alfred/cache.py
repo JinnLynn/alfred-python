@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 import os, json, time, shutil, codecs
+import hashlib
 
 import core
-##
-# {
-#     'expire_time'    : 0,
-#     'data'           : {} 
-# }
+from core import __cache_folder__
 
-CACHE_FOLDER = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
+# { 'expire_time' : 0, data' : {} }
 
 CACHE_DEFAULT_EXPIRE = 60 * 60 * 24
 
 class Cache(object):
     def __init__(self):
-        self.cache_dir = os.path.join(CACHE_FOLDER, core.bundleID())
+        self.cache_dir = os.path.join(__cache_folder__, core.bundleID())
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
 
     def getFilepath(self, name):
+        # convert to md5, more safe for file name
+        name = hashlib.md5(name).hexdigest()
         return os.path.join(self.cache_dir, '{}.json'.format(name))
 
     def getContent(self, name):
@@ -46,7 +45,7 @@ class Cache(object):
                     'data'          : data
                 }
             with codecs.open(path, 'w', 'utf-8') as f:
-                json.dump(cache, f)
+                json.dump(cache, f, indent=4)
         except:
             pass
 
