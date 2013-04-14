@@ -23,7 +23,7 @@ class Config(object):
 
     def save(self):
         with codecs.open(self.configFile, 'w', 'utf-8') as f:
-            json.dump(self.configs, f)
+            json.dump(self.configs, f, indent=4)
         
     def get(self, key, default = None):
         return self.configs.get(key, default)
