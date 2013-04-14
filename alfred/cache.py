@@ -65,3 +65,15 @@ class Cache(object):
         except:
             pass
         return -1
+
+def set(name, data, expire=CACHE_DEFAULT_EXPIRE):
+    Cache().set(name, data, expire)
+
+def get(name):
+    return Cache().get(name)
+
+def delete(name):
+    Cache().delete(name)
+
+def clean():
+    Cache().clean()
