@@ -8,7 +8,7 @@
 
 from .core import *
 
-from .cache import Cache
+import cache
 
 from .config import Config
 
