@@ -2,6 +2,7 @@
 import os, sys, plistlib, time
 
 from feedback import Feedback
+import util
 
 _bundle_id = None
 _CONFIG_FOLDER = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
@@ -11,12 +12,18 @@ def bundleID():
     global _bundle_id
     if _bundle_id:
         return _bundle_id
-    path = os.path.abspath('./info.plist')
     try:
-        info = plistlib.readPlist(path)
-        _bundle_id = info['bundleid']
-    except Exception, e:
-        raise Exception('get Bundle ID fail. {}'.format(e))
+        plist_path = os.path.abspath('./info.plist')
+        pref = plistlib.readPlist(plist_path)
+        _bundle_id = pref.get('bundleid', '')
+        name = pref.get('name', '')
+        if not _bundle_id and name:
+            name_hash = util.hashDigest(name)
+            _bundle_id = 'com.alfredapp.workflow.{}'.format(name_hash)
+    except:
+        pass
+    if not _bundle_id:
+        _bundle_id = 'com.alfredapp.workflow.BoudleIDMissing'
     return _bundle_id
 
 def log(s):
