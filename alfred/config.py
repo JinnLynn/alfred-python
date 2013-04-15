@@ -3,41 +3,45 @@ import os, json, codecs
 
 import core
 
-class Config(object):
-    def __init__(self, config_file = 'config.json'):
-        self.configs = {}
-        self.configFile = ''
-        path = os.path.join(core._CONFIG_FOLDER, core.bundleID())
-        if not os.path.exists(path):
-            os.makedirs(path)
-        self.configFile = os.path.join(path, config_file)
-        if os.path.exists(path):
-            try:
-                with codecs.open(self.configFile, 'r', 'utf-8') as f:
-                    self.configs = json.load(f)
-            except Exception, e:
-                pass
-        if not isinstance(self.configs, dict):
-            self.configs = {}
+_config_dir = os.path.join(core._CONFIG_FOLDER, core.bundleID())
 
-    def save(self):
-        with codecs.open(self.configFile, 'w', 'utf-8') as f:
-            json.dump(self.configs, f, indent=4)
-        
-    def get(self, key, default = None):
-        return self.configs.get(key, default)
+def _getFilepath():
+    if not os.path.exists(_config_dir):
+        os.makedirs(_config_dir)
+    return os.path.join(_config_dir, 'config.json')
 
-    def set(self, **kwargs):
-        for (k, v) in kwargs.iteritems():
-            self.configs[k] = v
-        self.save()
+def _save(configs):
+    filepath = _getFilepath()
+    with codecs.open(filepath, 'w', 'utf-8') as f:
+        json.dump(configs, f, indent=4)
 
-    def delete(self, key):
-        if not self.configs.has_key(key):
-            return
-        self.configs.pop(key)
-        self.save()
+def getAll():
+    filepath = _getFilepath()
+    try:
+        with codecs.open(filepath, 'r', 'utf-8') as f:
+            return json.load(f)
+    except:
+        pass
+    return {}
 
-    def clean(self):
-        self.configs = {}
-        self.save()
+def get(key, default=None):
+    configs = getAll()
+    return configs.get(key, default)
+
+def set(**kwargs):
+    configs = getAll()
+    for (k, v) in kwargs.iteritems():
+        configs[k] = v
+    _save(configs)
+
+def delete(key):
+    configs = getAll()
+    if not configs.has_key(key):
+        return
+    configs.pop(key)
+    _save(configs)
+
+def clean():
+    filepath = _getFilepath()
+    if os.path.exists(filepath):
+        os.remove(filepath)

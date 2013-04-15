@@ -15,9 +15,6 @@ __license__     = 'MIT license'
 __copyright__   = 'Copyright 2013 Jian Lin'
 
 from .core import *
-
-import cache
-
-from .config import Config
-
 from .feedback import Feedback, Item
+import cache
+import config
