@@ -4,15 +4,15 @@
 Alfred Python
 A simple python module for alfred workflow。
 
-Jian Lin
+JinnLynn
 http://jeeker.net
 The MIT License
 """
 
-__version__     = '0.1'
-__author__      = 'Jian Lin <eatfishlin@gmail.com>'
-__license__     = 'MIT license'
-__copyright__   = 'Copyright 2013 Jian Lin'
+__version__     = '0.2'
+__author__      = 'JinnLynn <eatfishlin@gmail.com>'
+__license__     = 'The MIT License'
+__copyright__   = 'Copyright 2013 JinnLynn'
 
 from .core import *
 from .feedback import Feedback, Item
