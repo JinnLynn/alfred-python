@@ -8,13 +8,14 @@ import core
 
 _DEFAULT_EXPIRE = 60 * 60 * 24
 
+_cache_dir = os.path.join(core._CACHE_FOLDER, core.bundleID())
+
 def _getFilepath(name):
-    cache_dir = os.path.join(core._CACHE_FOLDER, core.bundleID())
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
+    if not os.path.exists(_cache_dir):
+        os.makedirs(_cache_dir)
     # convert to md5, more safe for file name
     name = hashlib.md5(name).hexdigest()
-    return os.path.join(cache_dir, '{}.json'.format(name))
+    return os.path.join(_cache_dir, '{}.json'.format(name))
 
 def _getContent(name):
     try:
@@ -51,11 +52,10 @@ def delete(name):
         os.remove(cache_file)
 
 def clean():
-    cache_dir = os.path.join(__cache_folder__, core.bundleID())
-    if os.path.exists(cache_dir):
-        shutil.rmtree(cache_dir)
+    if os.path.exists(_cache_dir):
+        shutil.rmtree(_cache_dir)
 
-def expireTimeout(self, name):
+def expireTimeout(name):
     try:
         cache = _getContent(name)
         if cache['expire_time'] >= time.time():
