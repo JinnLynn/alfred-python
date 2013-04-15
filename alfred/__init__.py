@@ -18,3 +18,4 @@ from .core import *
 from .feedback import Feedback, Item
 import cache
 import config
+import storage

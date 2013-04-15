@@ -8,6 +8,7 @@ Features:
 * Feedback system: generate alfred feedback XML
 * Config management: save and retrieve settings
 * Cache management: save and retrieve cache data
+* Storage: download file
 
 ## License
 The MIT License
