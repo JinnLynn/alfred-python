@@ -2,7 +2,7 @@
 import os, json, time, shutil, codecs
 import hashlib
 
-import core
+import core, util
 
 # { 'expire_time' : 0, data' : {} }
 
@@ -14,8 +14,7 @@ def _getFilepath(name):
     if not os.path.exists(_cache_dir):
         os.makedirs(_cache_dir)
     # convert to md5, more safe for file name
-    name = hashlib.md5(name).hexdigest()
-    return os.path.join(_cache_dir, '{}.json'.format(name))
+    return os.path.join(_cache_dir, '{}.json'.format(util.hashDigest(name)))
 
 def _getContent(name):
     try:

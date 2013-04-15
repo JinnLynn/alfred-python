@@ -16,6 +16,4 @@ __copyright__   = 'Copyright 2013 JinnLynn'
 
 from .core import *
 from .feedback import Feedback, Item
-import cache
-import config
-import storage
+import util, cache, config, storage

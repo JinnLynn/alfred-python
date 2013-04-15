@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 import xml.sax.saxutils as saxutils
 import os, copy, random
 
-import core
+import core, util
 
 class Item(object):
     def __init__(self, **kwargs):
@@ -25,7 +25,7 @@ class Item(object):
             valid = None
 
         self.attrb = {
-            'uid'           : kwargs.get('uid', '{0}.{1}'.format(core.bundleID(), random.getrandbits(40))),
+            'uid'           : kwargs.get('uid', '{0}.{1}'.format(core.bundleID(), util.uid())),
             'arg'           : kwargs.get('arg', None),
             'valid'         : valid,
             'autocomplete'  : kwargs.get('autocomplete', None),
