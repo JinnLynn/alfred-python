@@ -4,7 +4,7 @@ import hashlib
 
 import core, util
 
-# { 'expire_time' : 0, data' : {} }
+# { 'expire_time' : 0, name: '', data' : {} }
 
 _DEFAULT_EXPIRE = 60 * 60 * 24
 
@@ -29,6 +29,7 @@ def set(name, data, expire=_DEFAULT_EXPIRE):
     try:
         cache = {
             'expire_time'   : time.time() + expire,
+            'name'          : name,
             'data'          : data
             }
         with codecs.open(filepath, 'w', 'utf-8') as f:
