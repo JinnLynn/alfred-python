@@ -15,12 +15,12 @@ def _getFilepath(name):
         os.makedirs(cache_dir)
     # convert to md5, more safe for file name
     name = hashlib.md5(name).hexdigest()
-    return os.path.join(self.cache_dir, '{}.json'.format(name))
+    return os.path.join(cache_dir, '{}.json'.format(name))
 
 def _getContent(name):
     try:
         filepath = _getFilepath(name)
-        with codecs.open(path, 'r', 'utf-8') as f:
+        with codecs.open(filepath, 'r', 'utf-8') as f:
             return json.load(f)
     except:
         pass
