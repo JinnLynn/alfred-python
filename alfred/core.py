@@ -3,21 +3,21 @@ import os, sys, plistlib, time
 
 from feedback import Feedback
 
-__bundle_id__ = None
-__config_folder__ = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
-__cache_folder__ = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
+_bundle_id = None
+_CONFIG_FOLDER = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
+_CACHE_FOLDER = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
 
 def bundleID():
-    global __bundle_id__
-    if __bundle_id__:
-        return __bundle_id__
+    global _bundle_id
+    if _bundle_id:
+        return _bundle_id
     path = os.path.abspath('./info.plist')
     try:
         info = plistlib.readPlist(path)
-        __bundle_id__ = info['bundleid']
+        _bundle_id = info['bundleid']
     except Exception, e:
         raise Exception('get Bundle ID fail. {}'.format(e))
-    return __bundle_id__
+    return _bundle_id
 
 def log(s):
     log_text = '[{} {}]: {}\n'.format(bundleID(), time.strftime('%Y-%m-%d %H:%M:%S'), s)

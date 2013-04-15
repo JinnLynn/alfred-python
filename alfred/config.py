@@ -2,13 +2,12 @@
 import os, json, codecs
 
 import core
-from core import __config_folder__
 
 class Config(object):
     def __init__(self, config_file = 'config.json'):
         self.configs = {}
         self.configFile = ''
-        path = os.path.join(__config_folder__, core.bundleID())
+        path = os.path.join(core._CONFIG_FOLDER, core.bundleID())
         if not os.path.exists(path):
             os.makedirs(path)
         self.configFile = os.path.join(path, config_file)

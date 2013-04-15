@@ -3,14 +3,13 @@ import os, json, time, shutil, codecs
 import hashlib
 
 import core
-from core import __cache_folder__
 
 # { 'expire_time' : 0, data' : {} }
 
 _DEFAULT_EXPIRE = 60 * 60 * 24
 
 def _getFilepath(name):
-    cache_dir = os.path.join(__cache_folder__, core.bundleID())
+    cache_dir = os.path.join(core._CACHE_FOLDER, core.bundleID())
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
     # convert to md5, more safe for file name
