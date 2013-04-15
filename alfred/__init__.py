@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 
-##
-# Alfred 2 Workflow python module
-# by JinnLynn 2013.04.02 http://jeeker.net
-# License under the MIT license
-##
+"""
+Alfred Python
+A simple python module for alfred workflow。
+
+Jian Lin
+http://jeeker.net
+The MIT License
+"""
+
+__version__     = '0.1'
+__author__      = 'Jian Lin <eatfishlin@gmail.com>'
+__license__     = 'MIT license'
+__copyright__   = 'Copyright 2013 Jian Lin'
 
 from .core import *
 
