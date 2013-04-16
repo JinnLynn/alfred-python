@@ -41,10 +41,10 @@ u'JinnLynn'
 >>> alfred.cache.set('test-cache', {'cache-data':'test-data'}, expire=10)
 >>> alfred.cache.get('test-cache')
 {u'cache-data': u'test-data'}
->>> alfred.cache.expireTimeout('test-cache')
+>>> alfred.cache.timeout('test-cache')
 2.6863911151885986
 >>> alfred.cache.get('test-cache')      # expired return None
->>> alfred.cache.expireTimeout('test-cache')
+>>> alfred.cache.timeout('test-cache')
 -1
 
 >>> alfred.storage.getLocalIfExists('http://i.imgur.com/17lNrSX.png')     # Non-existent

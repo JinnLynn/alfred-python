@@ -55,7 +55,7 @@ def clean():
     if os.path.exists(_cache_dir):
         shutil.rmtree(_cache_dir)
 
-def expireTimeout(name):
+def timeout(name):
     try:
         cache = _getContent(name)
         if cache['expire_time'] >= time.time():
