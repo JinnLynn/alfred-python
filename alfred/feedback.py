@@ -25,7 +25,7 @@ class Item(object):
             valid = None
 
         self.attrb = {
-            'uid'           : kwargs.get('uid', '{0}.{1}'.format(core.bundleID(), util.uid())),
+            'uid'           : kwargs.get('uid', util.uid()),
             'arg'           : kwargs.get('arg', None),
             'valid'         : valid,
             'autocomplete'  : kwargs.get('autocomplete', None),
