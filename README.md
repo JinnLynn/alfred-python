@@ -4,11 +4,11 @@ A simple python module for alfred workflow。
 
 Features:
 
-* Core: some functions to make building alfred workflow easier
-* Feedback system: generate alfred feedback XML
-* Config management: save and retrieve settings
-* Cache management: save and retrieve cache data
-* Storage: download file
+* Easily get bundle id, query arguments 
+* Simple feedback XML generation
+* Provides functions for storing or retrieving cache data
+* Workflow configuration management
+* Includes an easy way to download remote file
 
 ## Code Example
 
