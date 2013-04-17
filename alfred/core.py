@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, sys, plistlib, time
+import os, sys, plistlib, time, subprocess
 
 from feedback import Feedback
 import util
@@ -54,6 +54,12 @@ def exit(msg='', retcode=0):
     if msg:
         print(msg)
     sys.exit(retcode)
+    
+def show(query):
+    subprocess.call(
+        'osascript -e "tell application \\"Alfred 2\\" to search \\"' + query + '\\""',
+        shell=True
+    )
 
 def notify(title, subtitle, text='', sound=True):
     try:
