@@ -55,11 +55,9 @@ def exit(msg='', retcode=0):
         print(msg)
     sys.exit(retcode)
     
-def show(query):
-    subprocess.call(
-        'osascript -e "tell application \\"Alfred 2\\" to search \\"' + query + '\\""',
-        shell=True
-    )
+def query(word):
+    scpt = 'tell application "Alfred 2" to search "{}"'.format(word)
+    subprocess.call(['osascript', '-e', scpt])
 
 def notify(title, subtitle, text='', sound=True):
     try:
