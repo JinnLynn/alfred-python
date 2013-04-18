@@ -7,6 +7,9 @@ A simple python module for alfred workflow。
 JinnLynn
 http://jeeker.net
 The MIT License
+
+For more information, see the project page:
+https://github.com/JinnLynn/alfred-python
 """
 
 __version__     = '0.2'
