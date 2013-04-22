@@ -3,12 +3,11 @@ import os, json, codecs
 
 import core
 
-_config_dir = os.path.join(core._CONFIG_FOLDER, core.bundleID())
-
 def _getFilepath():
-    if not os.path.exists(_config_dir):
-        os.makedirs(_config_dir)
-    return os.path.join(_config_dir, 'config.json')
+    config_dir = os.path.join(core._config_base_dir, core.bundleID())
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir)
+    return os.path.join(config_dir, 'config.json')
 
 def _save(configs):
     filepath = _getFilepath()

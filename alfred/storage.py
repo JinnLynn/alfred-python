@@ -4,14 +4,13 @@ import os, urllib, subprocess
 
 import core, util, request
 
-_storage_dir = os.path.join('/tmp/Alfred 2', core.bundleID())
-
 def getLocalPath(source_link):
-    if not os.path.exists(_storage_dir):
-        os.makedirs(_storage_dir)
+    storage_dir = os.path.join(core._storage_base_dir, core.bundleID())
+    if not os.path.exists(storage_dir):
+        os.makedirs(storage_dir)
     _, ext = os.path.splitext(source_link)
     filename = '{}{}'.format(util.hashDigest(source_link), ext)
-    return os.path.join(_storage_dir, filename)
+    return os.path.join(storage_dir, filename)
 
 def getLocalIfExists(source_link, download=False):
     filepath = getLocalPath(source_link)

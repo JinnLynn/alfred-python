@@ -9,9 +9,10 @@ from feedback import Feedback, Item
 import util
 
 _bundle_id = None
-_CONFIG_FOLDER = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
-_CACHE_FOLDER = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
-_LOG_FOLDER = os.path.expanduser('~/Library/Logs/Alfred 2')
+_config_base_dir = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
+_cache_base_dir = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
+_log_base_dir = os.path.expanduser('~/Library/Logs/Alfred 2')
+_storage_base_dir = '/tmp/Alfred 2'
 
 def bundleID():
     global _bundle_id
@@ -35,7 +36,7 @@ def decode(s):
     return unicodedata.normalize("NFC", s.decode("utf-8"))
 
 def log(s):
-    log_dir = os.path.join(_LOG_FOLDER, bundleID())
+    log_dir = os.path.join(_log_base_dir, bundleID())
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
     now = datetime.now()
@@ -83,7 +84,7 @@ def notify(title, subtitle, text='', sound=True):
     except Exception, e:
         log('Notification failed. {}'.format(e))
 
-# ONLY used in 'try...except...' expression
+# ONLY used in 'try...except...'
 def raiseWithFeedback(feedback=None):
     exc = traceback.format_exc()
     if not exc or len(exc.split('\n')) < 4:
