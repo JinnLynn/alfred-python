@@ -23,7 +23,8 @@ Request(
     referer = '',
     user_agent = '',
     cookie = None,              # CookieJar, Cookie.S*Cookie, dict, string
-    auth = {'usr':'', 'pwd':''} # Only Basic Authorization
+    auth = {'usr':'', 'pwd':''}, # Only Basic Authorization
+    debug = False
     )
 """
 
@@ -121,7 +122,7 @@ class Request(object):
 
 
         # build opener
-        debuglevel = 0
+        debuglevel = 1 if kwargs.get('debug', False) else 0
         opener = urllib2.build_opener(
             urllib2.HTTPHandler(debuglevel=debuglevel),
             urllib2.HTTPSHandler(debuglevel=debuglevel),
