@@ -57,6 +57,9 @@ class Feedback(object):
     def __init__(self):
         self.items = []
 
+    def __repr__(self):
+        return self.get()
+
     def addItem(self, **kwargs):
         item = kwargs.pop('item', None)
         if not isinstance(item, Item):
