@@ -12,11 +12,15 @@ For more information, see the project page:
 https://github.com/JinnLynn/alfred-python
 """
 
-__version__     = '0.2'
+__version__     = '0.3'
 __author__      = 'JinnLynn <eatfishlin@gmail.com>'
 __license__     = 'The MIT License'
 __copyright__   = 'Copyright 2013 JinnLynn'
 
 from .core import *
 from .feedback import Feedback, Item
-import util, cache, config, storage
+import util
+import cache
+import config
+import storage
+import request
