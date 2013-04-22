@@ -2,7 +2,7 @@
 
 import os, urllib, subprocess
 
-import core, util
+import core, util, request
 
 _storage_dir = os.path.join('/tmp', core.bundleID())
 
@@ -53,7 +53,7 @@ def singleDownload(link):
         return
     try:
         filepath = getLocalPath(link)
-        urllib.urlretrieve(link, filepath)
+        request.download(link, filepath)
     except:
         pass
 
