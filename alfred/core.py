@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-import os, sys, plistlib, subprocess, codecs
+import os, sys, subprocess, codecs
+import plistlib
 from datetime import datetime
 import unicodedata
+import traceback
 
-from feedback import Feedback
+from feedback import Feedback, Item
 import util
 
 _bundle_id = None
@@ -85,4 +87,15 @@ def notify(title, subtitle, text='', sound=True):
         NSUserNotificationCenter.defaultUserNotificationCenter().scheduleNotification_(notification)
     except Exception, e:
         log('Notification failed. {}'.format(e))
-    
+
+# ONLY used in 'try...except...' expression
+def raiseWithFeedback(feedback=None):
+    exc = traceback.format_exc()
+    if not exc or len(exc.split('\n')) < 4:
+        return
+    excs = map(lambda s: s.strip(), exc.split('\n'))
+    item = Item(title=excs[3], subtitle=(': ').join(excs[1:3]))
+    if not isinstance(feedback, Feedback):
+        exitWithFeedback(item=item)
+    feedback.addItem(item=item)
+    exit()
