@@ -4,7 +4,7 @@ import os, urllib, subprocess
 
 import core, util, request
 
-_storage_dir = os.path.join('/tmp', core.bundleID())
+_storage_dir = os.path.join('/tmp/Alfred 2', core.bundleID())
 
 def getLocalPath(source_link):
     if not os.path.exists(_storage_dir):
