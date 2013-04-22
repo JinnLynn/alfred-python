@@ -42,6 +42,8 @@ def download(url, local, **kwargs):
     if not local:
         raise ValueError('local filepath is empty')
     try:
+        if not os.path.exists(os.path.dirname(local)):
+            os.makedirs(os.path.dirname(local))
         res = Request(url, **kwargs)
         read_size = 0
         real_size = int(res.header['content-length'])
@@ -52,11 +54,11 @@ def download(url, local, **kwargs):
                     break
                 f.write(block)
                 read_size += len(block)
-            if read_size < real_size:
-                raise urllib.ContentTooShortError(
-                    'retrieval incomplete: got only {} out of {} bytes'.formate(read_size, real_size),
-                    None
-                    )
+        if read_size < real_size:
+            raise urllib.ContentTooShortError(
+                'retrieval incomplete: got only {} out of {} bytes'.formate(read_size, real_size),
+                None
+                )
     except Exception, e:
         raise e
 
