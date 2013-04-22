@@ -15,20 +15,15 @@ _LOG_FOLDER = os.path.expanduser('~/Library/Logs/Alfred 2')
 
 def bundleID():
     global _bundle_id
-    if _bundle_id:
-        return _bundle_id
-    try:
-        plist_path = os.path.abspath('./info.plist')
-        pref = plistlib.readPlist(plist_path)
-        _bundle_id = pref.get('bundleid', '')
-        name = pref.get('name', '')
-        if not _bundle_id and name:
-            name_hash = util.hashDigest(name)
-            _bundle_id = 'com.alfredapp.workflow.{}'.format(name_hash)
-    except:
-        pass
     if not _bundle_id:
-        _bundle_id = 'com.alfredapp.workflow.BoudleIDMissing'
+        try:
+            plist_path = os.path.abspath('./info.plist')
+            prefs = plistlib.readPlist(plist_path)
+            _bundle_id = prefs['bundleid'].strip()
+            if not _bundle_id:
+                raise ValueError, 'bundle id missing.'
+        except:
+            raiseWithFeedback()
     return _bundle_id
 
 def setDefaultEncodingUTF8():
