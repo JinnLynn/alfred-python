@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, sys, plistlib, time, subprocess
+import unicodedata
 
 from feedback import Feedback
 import util
@@ -25,6 +26,14 @@ def bundleID():
     if not _bundle_id:
         _bundle_id = 'com.alfredapp.workflow.BoudleIDMissing'
     return _bundle_id
+
+def setDefaultEncodingUTF8():
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    del sys.setdefaultencoding
+
+def decode(s):
+    return unicodedata.normalize("NFC", s.decode("utf-8"))
 
 def log(s):
     log_text = '[{} {}]: {}\n'.format(bundleID(), time.strftime('%Y-%m-%d %H:%M:%S'), s)
