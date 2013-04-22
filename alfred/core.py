@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import os, sys, plistlib, time, subprocess
+import os, sys, plistlib, subprocess, codecs
+from datetime import datetime
 import unicodedata
 
 from feedback import Feedback
@@ -8,6 +9,7 @@ import util
 _bundle_id = None
 _CONFIG_FOLDER = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
 _CACHE_FOLDER = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
+_LOG_FOLDER = os.path.expanduser('~/Library/Logs/Alfred 2')
 
 def bundleID():
     global _bundle_id
@@ -36,14 +38,14 @@ def decode(s):
     return unicodedata.normalize("NFC", s.decode("utf-8"))
 
 def log(s):
-    log_text = '[{} {}]: {}\n'.format(bundleID(), time.strftime('%Y-%m-%d %H:%M:%S'), s)
-    log_file = os.path.abspath('./log.txt')
-    if not os.path.exists(log_file):
-        with open(log_file, 'w') as f:
-            f.write(log_text)
-    else:
-        with open(log_file, 'a') as f:
-            f.write(log_text)
+    log_dir = os.path.join(_LOG_FOLDER, bundleID())
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    now = datetime.now()
+    log_file = os.path.join(log_dir, '{}.log'.format(now.strftime('%Y-%m-%d')))
+    log_text = '{}: {}\n'.format(now.strftime('%Y-%m-%d %H:%M:%S.%f'), s)
+    with codecs.open(log_file, 'a', 'utf-8') as f:
+        f.write(log_text)
 
 def argv(pos, default=None):
     try:
