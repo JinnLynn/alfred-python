@@ -94,4 +94,5 @@ def raiseWithFeedback(feedback=None):
     if not isinstance(feedback, Feedback):
         exitWithFeedback(item=item)
     feedback.addItem(item=item)
+    feedback.output()
     exit()
