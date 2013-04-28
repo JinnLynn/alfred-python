@@ -29,7 +29,7 @@ def bundleID():
 
 def setDefaultEncodingUTF8():
     reload(sys)
-    sys.setdefaultencoding('utf8')
+    sys.setdefaultencoding('utf-8')
     del sys.setdefaultencoding
 
 def decode(s):
