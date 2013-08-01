@@ -95,7 +95,6 @@ class Request(object):
             if isinstance(data, dict):
                 data = urlencode(data)
             if not isinstance(data, basestring):
-                data = None
                 raise ValueError('data must be string or dict')
 
         request_type = kwargs.get('type', 'POST')
@@ -148,7 +147,7 @@ class Request(object):
             HTTPHandler(debuglevel=debuglevel),
             HTTPSHandler(debuglevel=debuglevel),
             HTTPCookieProcessor(cj)
-            )
+        )
 
         # timeout
         timeout = kwargs.get('timeout')

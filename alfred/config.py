@@ -30,7 +30,7 @@ def get(key, default=None):
 
 def set(**kwargs):
     configs = getAll()
-    for (k, v) in kwargs.items():
+    for k, v in kwargs.items():
         configs[k] = v
     _save(configs)
 

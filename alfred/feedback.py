@@ -33,20 +33,15 @@ class Item(object):
             'type'          : kwargs.get('type', None)
         }
 
-        for key in self.content.keys():
-            if self.content[key] is None:
-                del self.content[key]
-
-        for key in self.attrb.keys():
-            if self.attrb[key] is None:
-                del self.attrb[key]
+        self.content = dict((k, v) for k, v in self.content.items() if v is not None)
+        self.attrb = dict((k, v) for k, v in self.attrb.items() if v is not None)
 
     def copy(self):
         return copy.copy(self)
 
     def getXMLElement(self):
         item = ElementTree.Element('item', self.attrb)
-        for (k, v) in self.content.items():
+        for k, v in self.content.items():
             attrb = {}
             if k == 'icon' and self.icon_type:
                 attrb['type'] = self.icon_type
@@ -63,8 +58,7 @@ class Feedback(object):
 
     def addItem(self, **kwargs):
         item = kwargs.pop('item', None)
-        if not isinstance(item, Item):
-            item = Item(**kwargs)
+        item = item if isinstance(item, Item) else Item(**kwargs)
         self.items.append(item)
 
     def clean(self):
