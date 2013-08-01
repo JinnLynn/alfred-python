@@ -1,10 +1,29 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import absolute_import, division, unicode_literals
 import os
-import urllib, urllib2, urlparse
-import Cookie
-from cookielib import CookieJar
 import base64
+
+from . import core
+
+if core.PY2:
+    from urllib import ContentTooShortError
+    from urllib2 import HTTPError, URLError
+    from urllib import urlencode
+    from urllib2 import Request as urlRequest
+    from urllib2 import build_opener
+    from urllib2 import HTTPHandler, HTTPSHandler, HTTPCookieProcessor
+    import Cookie
+    from cookielib import CookieJar
+
+if core.PY3:
+    from urllib.error import ContentTooShortError, HTTPError, URLError
+    from urllib.parse import urlencode
+    from urllib.request import Request as urlRequest
+    from urllib.request import build_opener
+    from urllib.request import HTTPHandler, HTTPSHandler, HTTPCookieProcessor
+    from http import cookies as Cookie
+    from http.cookiejar import CookieJar
+
 
 """
 Simple module to request HTTP
@@ -55,11 +74,11 @@ def download(url, local, **kwargs):
                 f.write(block)
                 read_size += len(block)
         if read_size < real_size:
-            raise urllib.ContentTooShortError(
+            raise ContentTooShortError(
                 'retrieval incomplete: got only {} out of {} bytes'.formate(read_size, real_size),
                 None
                 )
-    except Exception, e:
+    except Exception as e:
         raise e
 
 class Request(object):
@@ -74,7 +93,7 @@ class Request(object):
         data = kwargs.get('data', None)
         if data:
             if isinstance(data, dict):
-                data = urllib.urlencode(data)
+                data = urlencode(data)
             if not isinstance(data, basestring):
                 data = None
                 raise ValueError('data must be string or dict')
@@ -84,7 +103,7 @@ class Request(object):
             url = '{}?{}'.format(url, data)
             data = None # GET data must be None
 
-        self.request = urllib2.Request(url, data)
+        self.request = urlRequest(url, data)
 
         # referer
         referer = kwargs.get('referer', None)
@@ -98,7 +117,7 @@ class Request(object):
 
         # auth
         auth = kwargs.get('auth', None)
-        if auth and isinstance(auth, dict) and auth.has_key('usr'):
+        if auth and isinstance(auth, dict) and 'usr' in auth:
             auth_string = base64.b64encode('{}:{}'.format(auth.get('usr',''), auth.get('pwd','')))
             self.request.add_header('Authorization', 'Basic {}'.format(auth_string))  
 
@@ -110,7 +129,7 @@ class Request(object):
                 cj = cookie
             elif isinstance(cookie, dict):
                 result = []
-                for k, v in cookie.iteritems():
+                for k, v in cookie.items():
                     result.append('{}={}'.format(k, v))
                 cookie = '; '.join(result)
             elif isinstance(cookie, Cookie.BaseCookie):
@@ -125,10 +144,10 @@ class Request(object):
 
         # build opener
         debuglevel = 1 if kwargs.get('debug', False) else 0
-        opener = urllib2.build_opener(
-            urllib2.HTTPHandler(debuglevel=debuglevel),
-            urllib2.HTTPSHandler(debuglevel=debuglevel),
-            urllib2.HTTPCookieProcessor(cj)
+        opener = build_opener(
+            HTTPHandler(debuglevel=debuglevel),
+            HTTPSHandler(debuglevel=debuglevel),
+            HTTPCookieProcessor(cj)
             )
 
         # timeout
@@ -141,15 +160,15 @@ class Request(object):
             self.code = self.response.getcode()
             self.header = self.response.info().dict
             self.cookieJar = cj
-        except urllib2.HTTPError, e:
+        except HTTPError as e:
             self.code = e.code
             self.reason = '{}'.format(e)
             raise e
-        except urllib2.URLError, e:
+        except URLError as e:
             self.code = -1
             self.reason = e.reason
             raise e
-        except Exception, e:
+        except Exception as e:
             self.code = -1
             self.reason = '{}'.format(e)
             raise e

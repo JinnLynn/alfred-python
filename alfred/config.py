@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 import os, json, codecs
 
-import core
+from . import core
 
 def _getFilepath():
     config_dir = os.path.join(core._config_base_dir, core.bundleID())
@@ -29,13 +30,13 @@ def get(key, default=None):
 
 def set(**kwargs):
     configs = getAll()
-    for (k, v) in kwargs.iteritems():
+    for (k, v) in kwargs.items():
         configs[k] = v
     _save(configs)
 
 def delete(key):
     configs = getAll()
-    if not configs.has_key(key):
+    if key not in configs:
         return
     configs.pop(key)
     _save(configs)

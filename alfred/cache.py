@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 import os, json, time, shutil, codecs
 import hashlib
 
-import core, util
+from . import util
+from . import core
 
 # { 'expire_time' : 0, name: '', data' : {} }
 

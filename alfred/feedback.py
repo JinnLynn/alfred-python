@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from xml.etree import ElementTree
 import xml.sax.saxutils as saxutils
 import os, copy, random
 
-import core, util
+from .util import uid
 
 class Item(object):
     def __init__(self, **kwargs):
@@ -17,7 +18,7 @@ class Item(object):
         self.icon_type = it if it in ['fileicon', 'filetype'] else None
 
         valid = kwargs.get('valid', None)
-        if isinstance(valid, (str, unicode)) and valid.lower() == 'no':
+        if isinstance(valid, basestring) and valid.lower() == 'no':
             valid = 'no'
         elif isinstance(valid, bool) and not valid:
             valid = 'no'
@@ -25,7 +26,7 @@ class Item(object):
             valid = None
 
         self.attrb = {
-            'uid'           : kwargs.get('uid', util.uid()),
+            'uid'           : kwargs.get('uid', uid()),
             'arg'           : kwargs.get('arg', None),
             'valid'         : valid,
             'autocomplete'  : kwargs.get('autocomplete', None),
@@ -45,7 +46,7 @@ class Item(object):
 
     def getXMLElement(self):
         item = ElementTree.Element('item', self.attrb)
-        for (k, v) in self.content.iteritems():
+        for (k, v) in self.content.items():
             attrb = {}
             if k == 'icon' and self.icon_type:
                 attrb['type'] = self.icon_type

@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 import os, sys, subprocess, codecs
 import plistlib
 from datetime import datetime
 import unicodedata
 import traceback
 
-from feedback import Feedback, Item
-import util
+from .feedback import Feedback, Item
 
 _bundle_id = None
 _config_base_dir = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
 _cache_base_dir = os.path.expanduser('~/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/')
 _log_base_dir = os.path.expanduser('~/Library/Logs/Alfred 2')
 _storage_base_dir = '/tmp/Alfred 2'
+
+PY2 = sys.version_info.major == 2
+PY3 = sys.version_info.major == 3
 
 def bundleID():
     global _bundle_id
@@ -22,7 +25,7 @@ def bundleID():
             prefs = plistlib.readPlist(plist_path)
             _bundle_id = prefs['bundleid'].strip()
             if not _bundle_id:
-                raise ValueError, 'bundle id missing.'
+                raise ValueError('bundle id missing.')
         except:
             raiseWithFeedback()
     return _bundle_id
@@ -81,7 +84,7 @@ def notify(title, subtitle, text='', sound=True):
         if sound:
             notification.setSoundName_("NSUserNotificationDefaultSoundName")
         NSUserNotificationCenter.defaultUserNotificationCenter().scheduleNotification_(notification)
-    except Exception, e:
+    except Exception as e:
         log('Notification failed. {}'.format(e))
 
 # ONLY used in 'try...except...'
@@ -89,7 +92,7 @@ def raiseWithFeedback(feedback=None):
     exc = traceback.format_exc()
     if not exc or len(exc.split('\n')) < 4:
         return
-    excs = map(lambda s: s.strip(), exc.split('\n'))
+    excs = [s.strip() for s in exc.split('\n')]
     item = Item(title=excs[3], subtitle=(': ').join(excs[1:3]))
     if not isinstance(feedback, Feedback):
         exitWithFeedback(item=item)

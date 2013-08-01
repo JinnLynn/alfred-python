@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
+import os, subprocess
 
-import os, urllib, subprocess
-
-import core, util, request
+from . import core, util, request
 
 def getLocalPath(source_link):
     storage_dir = os.path.join(core._storage_base_dir, core.bundleID())
@@ -25,7 +25,7 @@ def isLocalExists(source_link):
     return os.path.exists(filepath)
 
 def batchDownload(links, wait=True):
-    if isinstance(links, (str, unicode)):
+    if isinstance(links, basestring):
         links = links.split(',')
     if not links or not isinstance(links, list):
         return
