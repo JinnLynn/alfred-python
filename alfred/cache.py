@@ -10,12 +10,13 @@ from . import core
 
 _DEFAULT_EXPIRE = 60 * 60 * 24
 
+_cache_dir = os.path.join(core._cache_base_dir, core.bundleID())
+
 def _getFilepath(name):
-    cache_dir = os.path.join(core._cache_base_dir, core.bundleID())
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
+    if not os.path.exists(_cache_dir):
+        os.makedirs(_cache_dir)
     # convert to md5, more safe for file name
-    return os.path.join(cache_dir, '{}.json'.format(util.hashDigest(name)))
+    return os.path.join(_cache_dir, '{}.json'.format(util.hashDigest(name)))
 
 def _getContent(name):
     try:
@@ -57,6 +58,24 @@ def clean():
     if os.path.exists(cache_dir):
         shutil.rmtree(cache_dir)
 
+def cleanExpired():
+    if not os.path.exists(_cache_dir):
+        return
+    to_remove = []
+    for f in os.listdir(_cache_dir):
+        if not f.endswith('.json'):
+            continue
+        filepath = os.path.join(_cache_dir, f)
+        try:
+            with codecs.open(filepath, 'r', 'utf-8') as fp:
+                cache = json.load(fp)
+                if cache['expire_time'] < time.time():
+                    to_remove.append(filepath)
+        except Exception, e:
+            to_remove.append(filepath)
+    for f in to_remove:
+        os.remove(f)
+        
 def timeout(name):
     try:
         cache = _getContent(name)
