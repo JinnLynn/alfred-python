@@ -12,7 +12,7 @@ https://github.com/JinnLynn/alfred-python
 '''
 from __future__ import absolute_import, division, unicode_literals
 
-__version__     = '0.3'
+__version__     = '0.3.1'
 __author__      = 'JinnLynn <eatfishlin@gmail.com>'
 __license__     = 'The MIT License'
 __copyright__   = 'Copyright 2013 JinnLynn'
