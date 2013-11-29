@@ -39,7 +39,7 @@ def set(name, data, expire=_DEFAULT_EXPIRE):
     except:
         pass
 
-def get(name):
+def get(name, default=None):
     try:
         cache = _getContent(name)
         if cache['expire_time'] >= time.time():
@@ -47,6 +47,7 @@ def get(name):
     except:
         pass
     delete(name)
+    return default
 
 def delete(name):
     cache_file = _getFilepath(name)
