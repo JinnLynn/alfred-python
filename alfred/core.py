@@ -93,7 +93,7 @@ def raiseWithFeedback(feedback=None):
     if not exc or len(exc.split('\n')) < 4:
         return
     excs = [s.strip() for s in exc.split('\n')]
-    item = Item(title=excs[3], subtitle=(': ').join(excs[1:3]))
+    item = Item(title=excs[3], subtitle=(': ').join(excs[1:3]), valid=False)
     if not isinstance(feedback, Feedback):
         exitWithFeedback(item=item)
     feedback.addItem(item=item)
