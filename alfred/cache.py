@@ -8,7 +8,7 @@ from . import core
 
 # { 'expire_time' : 0, name: '', data' : {} }
 
-_DEFAULT_EXPIRE = 60 * 60 * 24
+_DEFAULT_EXPIRE = 3600 * 24
 
 _cache_dir = os.path.join(core._cache_base_dir, core.bundleID())
 
@@ -85,3 +85,19 @@ def timeout(name):
     except:
         pass
     return -1
+
+def cached(_cache_name, **kw):
+    _expire = kw.get('_expire', _DEFAULT_EXPIRE)
+    _get_check = kw.get('_get_check', lambda d: True)
+    _set_check = kw.get('_set_check', lambda d: bool(d))
+    def _cached(func):
+        def wrapper(*args, **kwargs):
+            data = get(_cache_name)
+            if data is not None and _get_check(data):
+                return data
+            data = func(*args, **kwargs)
+            if data is not None and _set_check(data):
+                set(_cache_name, data, _expire)
+            return data
+        return wrapper
+    return _cached

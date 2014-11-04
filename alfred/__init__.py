@@ -18,9 +18,11 @@ __license__     = 'The MIT License'
 __copyright__   = 'Copyright 2013 JinnLynn'
 
 from .core import *
-from .feedback import Feedback, Item
 from . import util
 from . import cache
 from . import config
 from . import storage
 from . import request
+
+from .feedback import Feedback, Item
+from .cache import cached
