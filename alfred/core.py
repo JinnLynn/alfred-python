@@ -2,11 +2,13 @@
 from __future__ import absolute_import, division, unicode_literals
 import os, sys, subprocess, codecs
 import plistlib
+import json
 from datetime import datetime
 import unicodedata
 import traceback
 
 from .feedback import Feedback, Item
+from . import __version__
 
 _bundle_id = None
 _config_base_dir = os.path.expanduser('~/Library/Application Support/Alfred 2/Workflow Data/')
@@ -34,6 +36,56 @@ def setDefaultEncodingUTF8():
     reload(sys)
     sys.setdefaultencoding('utf-8')
     del sys.setdefaultencoding
+
+def getWorkflows():
+    from .cache import cached
+    @cached('workflows-alfred-python-v{}'.format(__version__), _expire=10)
+    def _getWorkflows():
+        workflows = {
+            'enabled'   : {},
+            'disabled'  : {},
+            'bundleid_missing' : []
+        }
+        pref_file = os.path.expanduser('~/Library/Preferences/com.runningwithcrayons.Alfred-Preferences.plist')
+        workflows_path = os.path.expanduser('~/Library/Application Support/Alfred 2/Alfred.alfredpreferences/workflows')
+        try:
+            # binary
+            res = subprocess.check_output(['plutil', '-convert', 'json', '-o', '-', pref_file])
+            pref = json.loads(res)
+            if int(pref['version'].split('.')[0]) < 2:
+                return workflows
+        except:
+            return workflows
+        if pref.has_key('syncfolder'):
+            syncfolder = os.path.expanduser(pref['syncfolder'])
+            workflows_path = os.path.join(syncfolder, 'Alfred.alfredpreferences/workflows')
+        if not os.path.isdir(workflows_path):
+            return workflows
+        for f in os.listdir(workflows_path):
+            fullpath = os.path.join(workflows_path, f)
+            if not os.path.isdir(fullpath):
+                continue
+            try:
+                prefs = plistlib.readPlist(os.path.join(fullpath, 'info.plist'))
+                bundleid = prefs['bundleid'].strip()
+                if not bundleid:
+                    workflows['bundleid_missing'].append(fullpath)
+                    continue
+                if prefs['disabled']:
+                    workflows['disabled'].update({bundleid:fullpath})
+                    continue
+                workflows['enabled'].update({bundleid:fullpath})
+            except Exception, e:
+                pass
+        return workflows
+
+    return _getWorkflows()
+
+def isWorkflowWorking(bundle_id):
+    try:
+        return bundle_id in getWorkflows().get('enabled', {}).keys()
+    except:
+        return False
 
 def decode(s):
     return unicodedata.normalize("NFC", s.decode("utf-8"))
